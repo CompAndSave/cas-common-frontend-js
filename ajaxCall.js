@@ -3,12 +3,11 @@
  * 
  * @param {string} type Api call type, e.g, GET, POST
  * @param {string} url Api url endpoint
- * @param {object} [data] Data object if formData is not provided
+ * @param {object} data Data object
  * @param {function} resolve Resolve function
  * @param {function} reject Reject function
- * @param {formData} [formData] If provided, formData will be used
  */
- export const ajaxCall = (type, url, data, resolve, reject, formData)=> {
+ export const ajaxCall = (type, url, data, resolve, reject)=> {
   let xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function () {
     try {
@@ -19,6 +18,6 @@
   };
 
   xhttp.open(type, url, true);
-  if (typeof formData === "undefined") { xhttp.setRequestHeader("Content-Type", "application/json"); }
-  xhttp.send(typeof formData === "undefined" ? JSON.stringify({ data: data }) : formData);
+  if (!(data instanceof FormData)) { xhttp.setRequestHeader("Content-Type", "application/json"); }
+  xhttp.send(data instanceof FormData ? data : JSON.stringify({ data: data }));
 }
